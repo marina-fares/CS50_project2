@@ -1,0 +1,61 @@
+.signinform{
+    width:500px;
+    font-size:20px;
+    border:2px solid pink;
+    height:300px;
+    text-align:center;
+    margin:100px;
+    border-radius:20px;
+}
+.formElement{
+    border-radius:10px;
+    margin:20px;
+}
+label{
+    text-decoration: underline;
+    text-underline-position: under;
+    text-decoration-color: pink;
+}
+ #footer{
+     position: fixed; 
+     padding: 10px 10px 0px 10px; 
+     bottom: 0; 
+     width: 100%; 
+     /* Height of the footer*/  
+     height: 40px; 
+     background: pink;
+ }
+ .welElement{
+     margin:10px 0px;
+ }
+ .chatbox{
+
+     position: absolute ;
+     z-index:-1;
+     top:50px;
+     right: 0;
+     bottom: 0;
+     left: 0;
+     margin:20px;
+     margin-bottom:60px;
+     border-radius:10px;
+ }
+ .navbar{
+     background-color:pink;
+ }
+ ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: pink;
+    border-radius: 10px;
+  }
+ 

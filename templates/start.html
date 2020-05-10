@@ -1,72 +1,9 @@
-<!DOCTYPE html>
-<html>
-    <head>
-    <style> 
-        
-        .navbar{ 
-            background-color: pink; 
-        };
+{% extends 'layout.html' %}
+{% block title %}
+<title>Welcome</title>
+{% endblock  %}
 
-        link{
-            color: black;
-            font-size:20px;
-        }
-
-       .signinform{
-           width:200px;
-           font-size:20px;
-           border:2px solid pink;
-           height:300px;
-           text-align:center;
-           margin:100px;
-           border-radius:20px;
-       }
-       .formElement{
-           border-radius:10px;
-           margin:20px;
-       }
-       label{
-           text-decoration: underline;
-           text-underline-position: under;
-           text-decoration-color: pink;
-       }
-        #footer{
-            position: fixed; 
-            padding: 10px 10px 0px 10px; 
-            bottom: 0; 
-            width: 100%; 
-            /* Height of the footer*/  
-            height: 40px; 
-            background: pink;
-        }
-        .welElement{
-            margin:10px 0px;
-        }
-
-    </style>
-        <title>My Webpage</title>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-            <!--link rel = "stylesheet" type = "text/css" href= "{{ url_for('static',filename='styles/signin.css') }}" /-->
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-            <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    
-    
-
-    </head>
-    <body>
-
-        <nav class="navbar navbar-expand-lg Regular shadow">
-            <a class="navbar-brand" href="#">ChatApp</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-        </nav>
-
+{% block Welcome %}
 <!--welcomeblock-->
 <div class='container'>
     
@@ -75,17 +12,29 @@
     <h1>Channels</h1>
     </div>
     <div class='col-4 welElement'>
-    <h1>Welcome Marina</h1>
+    <h1>Welcome {{username}}</h1>
     </div>
     </div>
     
     <div class='row'>
-    <div class='col-4 welElement'>
+    <div class='col-4 welElement '>
         <!--addNewRoom block-->
-        <input type='text'style="border:none;" placeholder='New Room'></input>
-        <button type="button" class="btn btn-default float-right" aria-label="Right Align">
-        <span class="glyphicon glyphicon-plus " aria-hidden="true"></span>
-        </button>
+            <form action="{{url_for('createroom',ownername=username)}}" method="post">
+            <div class='row'>
+
+                <div class='col-8'>
+                    <input type='text'style="border:e;" placeholder='New Room' name='roomname' class='form-control '></input>
+                </div>
+            
+            <div class='col-4'>
+                <button type="submit" class="btn btn-default float-right" aria-label="Right Align">
+                <span class="glyphicon glyphicon-plus " aria-hidden="true"></span>
+                </button>
+            </div>
+            </div>
+            </form>
+            
+
         <!--endblock-->
     </div>
     </div>
@@ -98,9 +47,9 @@
             Join
         </button>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Room1</a>
-            <a class="dropdown-item" href="#">Room2</a>
-            <a class="dropdown-item" href="#">Room3</a>
+        {%for room in rooms%}
+            <a class="dropdown-item" href="{{url_for('ViewRoom',roomname=room[1],username=username)}}">{{room[1]}}</a>
+        {%endfor%}
         </div>
 
     </div>
@@ -109,11 +58,4 @@
 
 </div>
 <!--endblock-->
-<!--footer block-->
-<div id='footer' class='shadow'>
-<small>Made by <span style='color:blue'>Marina Fares</span> for edx's CS50 course project</small>
-</div>
-<!--endblock-->
-
-    </body>
-</html>
+{% endblock  %}

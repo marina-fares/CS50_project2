@@ -1,0 +1,5 @@
+1) authentication input user
+2) make name opject in class models uniqe
+3) make alert functions whene error exist
+4) style of update page and rewrite it's functionality
+5) rewrite commit for each function and rewrite README.md

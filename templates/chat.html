@@ -1,78 +1,143 @@
-<!DOCTYPE html>
-<html>
-    <head>
-    <style> 
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>chat</title>
+{% endblock  %}
+
+{% block chatblock %}
+        <!--ChatBodyBlock-->
+<div class='container chatbox' style='position:relaive'>
+    <div class='row' >
+        <div class='col-8  container-fluid' >
+
+            <!--header-->
+            <div class='col-12 navbar' style='height:20px;padding-bottom:10%;'>
+                <h2>{{roomname}} Room</h2>
+            </div>
+                <!--endheader-->
+                
+                <!--chatblock-->
+            <div class='col-12 ' style='height:450px;border:2px solid pink; border-radius:5px;' >
+            
+            <div class='d-flex flex-column' id='chatlogs' style='height:370px; overflow-y:auto; overflow-x:hidden'>    
+                {%for message in list_of_messages%}
+                    <p><b>{{message[0]}}</b> <small> {{message[1]}} </small>: {{message[2]}} </p>
+                {%endfor%}
+
+                <div id="messages">
+                </div>
+            </div>
+
+            <div class='d-flex flex-column'>
+            <form id="message_input_form"class="d-flex flex-column" style="">
+                <input id="message_input" class='form-control' type='text' placeholder="Type" style='border:gray solid 2px;'>
+                <button type="submit" class="btn btn-outline-secondary" style='border:gray solid 2px;'>Send</button>
+            </form>      
+            </div>
+
+            </div> 
+            
+            <!--endchat-->
+
+        </div>
+
+        <!--partnerblock-->
+        <div class='col-3 navbar justify-content-center'style='height:550px;'>
+            <div class='d-flex flex-column'>
+
+                <div class='p-2'>
+                <form action="{{url_for('updateroom1',username=username,roomname=roomname)}}" method='get'>
+                <button type='submit'>Update Room</button>
+                </form>
+                </div>
+                
+                <div class="p-2 " style=''>
+                <h2 class="center" >Partners</h2>
+                <ul>
+                {% for member in members%}
+                <li class="center" >{{member}}</li><br>
+                {%endfor%}
+                </ul>
+                </div>
+            </div>
+
         
-        .navbar{ 
-            background-color: pink; 
-        };
 
-        link{
-            color: black;
-            font-size:20px;
-        }
+        </div>
 
-       .signinform{
-           width:200px;
-           font-size:20px;
-           border:2px solid pink;
-           height:300px;
-           text-align:center;
-           margin:100px;
-           border-radius:20px;
-       }
-       .formElement{
-           border-radius:10px;
-           margin:20px;
-       }
-       label{
-           text-decoration: underline;
-           text-underline-position: under;
-           text-decoration-color: pink;
-       }
-        #footer{
-            position: fixed; 
-            padding: 10px 10px 0px 10px; 
-            bottom: 0; 
-            width: 100%; 
-            /* Height of the footer*/  
-            height: 40px; 
-            background: pink;
-        }
-        .welElement{
-            margin:10px 0px;
-        }
-
-    </style>
-        <title>My Webpage</title>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-            <!--link rel = "stylesheet" type = "text/css" href= "{{ url_for('static',filename='styles/signin.css') }}" /-->
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-            <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    
-    
-
-    </head>
-    <body>
-
-        <nav class="navbar navbar-expand-lg Regular shadow">
-            <a class="navbar-brand" href="#">ChatApp</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-        </nav>
-
-<!--endblock-->
-<!--footer block-->
-<div id='footer' class='shadow'>
-<small>Made by <span style='color:blue'>Marina Fares</span> for edx's CS50 course project</small>
+        <!--endblock-->
+    </div>
 </div>
-<!--endblock-->
+<!--endBlock-->
 
-    </body>
-</html>
+
+
+{% endblock  %}
+
+{%block scr%}
+
+     <script >
+    
+     function updateScroll() {
+        var element = document.getElementById("chatlogs");
+        var elementHeight = element.scrollHeight;
+        element.scrollTop = elementHeight
+        }
+    window.onload = updateScroll;  
+const socket = io.connect("http://127.0.0.1:5000");
+
+    socket.on('connect', function () {
+        socket.emit('join_room', {
+            username: "{{ username }}",
+            roomname: "{{ room.name }}"
+        });
+
+        let message_input = document.getElementById('message_input');
+
+        document.getElementById('message_input_form').onsubmit = function (e) {
+            e.preventDefault();
+            let message = message_input.value.trim();
+            if (message.length) {
+                socket.emit('send_message', {
+                    username: "{{ username }}",
+                    roomid: "{{ room.id }}",
+                    roomname: "{{ room.name }}",
+                    message: message
+                })
+            }
+            message_input.value = '';
+            message_input.focus();
+        }
+    });
+
+    window.onbeforeunload = function () {
+        socket.emit('leave_room', {
+            username: "{{ username }}",
+            roomname: "{{ room.name }}"
+        })
+    };
+
+    socket.on('receive_message', function (data) {
+        console.log(data);
+        const newNode = document.createElement('div');
+        newNode.innerHTML = `<b>${data.username}:&nbsp;</b> <small> ${data.created_at} </small>: ${data.message}`;
+        document.getElementById('messages').appendChild(newNode);
+    });
+
+    socket.on('join_room_announcement', function (data) {
+        console.log(data);
+        if (data.username !== "{{ username }}") {
+            const newNode = document.createElement('div');
+            newNode.innerHTML = `<b>${data.username}</b> has joined the room`;
+            document.getElementById('messages').appendChild(newNode);
+        }
+    });
+
+    socket.on('leave_room_announcement', function (data) {
+        console.log(data);
+        const newNode = document.createElement('div');
+        newNode.innerHTML = `<b>${data.username}</b> has left the room`;
+        document.getElementById('messages').appendChild(newNode);
+    });
+      </script>
+{%endblock%}
