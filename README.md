@@ -7,6 +7,7 @@ This project an online messaging service using Flask, similar in spirit to Slack
 
 ### Installing
 
+```
 pip install virtualenv
 virtualenv chatapp
 cd chatapp
@@ -14,3 +15,4 @@ cd chatapp
 pip install -r requirements.txt
 export FLASK_APP=application.py
 flask run
+```
