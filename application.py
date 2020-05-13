@@ -19,6 +19,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///chatdb"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
+rooms=[]
 
 @app.route("/")
 def signin():
@@ -51,7 +52,7 @@ def welcome():
 
         user = UserData.query.filter_by(name=username , password=password).first()
         if not user:
-            flash("username or password not correct please try again")        
+            flash("Error! username or password not correct please try again")        
             return render_template('signin.html')
 
     return render_template("start.html", username = username, rooms = rooms)
@@ -77,54 +78,73 @@ def storedate():
         
         return render_template('start.html', username=username, rooms = rooms )
     except:
-        flash('this user name is used plaese use another one')
+        flash('Error! this user name is used plaese use another one')
         return render_template("signin.html")
 
 
 
 @app.route("/viewroom/<username>/<roomname>")
 def ViewRoom(username,roomname):
+    '''
+    when user choose spesific room from drop down menue
+    input : username & roomname
+    return : room page with history of old chats and Room's partners
+    '''
     members=get_room_members(roomname)
     room= Room.query.filter_by(name=roomname).first()
+
     if username not in members:
         add_room_member(roomname, username)
     list_of_messages = get_messages(roomname)
-    return render_template("chat.html",roomname=roomname,room=room, members=members, username=username, list_of_messages=list_of_messages )
+    
+    return render_template("chat.html",room=room, members=members, username=username, list_of_messages=list_of_messages )
 
-@app.route('/chat',methods=["POST"])
-def chat():
-    roomName = request.form.get('username')
-    roomId = request.form.get('room')
-
-    return render_template('start.html',room=roomId,username=roomName)
 
 @app.route('/create_room/<ownername>', methods=['post'])
 def createroom(ownername):
+    '''
+    this function create new room &
+    make user as room owner who
+    is have access to update this room
+    '''
+    rooms= Room.query.add_columns('name').all()
 
     if request.method== 'POST':
         roomname= request.form.get('roomname')
         if len(roomname):
-            create_room(ownername,roomname)
+            try:
+                create_room(ownername,roomname)
+            except:
+                flash("Error! this Room name is used please choose uniqe one")
+                return render_template('start.html',username = ownername, rooms = rooms)
+    
         else:
-            return "Error! please enter Room Name"
+            flash("Error! please enter Room Name")
+            return render_template('start.html',username = ownername, rooms = rooms)
+            
         room= Room.query.filter_by(name=roomname).first()
         return render_template('chat.html',roomname=roomname, room = room, username=ownername)
     else:
         return "Method isn't post"
 
+
 @app.route('/updateroom/<username>/<roomname>',methods=['POST', 'GET'])
-def updateroom1(username, roomname):
+def updateroom(username, roomname):
+    '''
+    this function give an access to the owner 
+    to update the Room data
+    '''
     room = Room.query.filter_by(name=roomname).first()
 
-    if room and is_owner(username):
+    if room and is_owner(username, roomname):
         members= get_room_members(roomname)
 
         if request.method == 'POST':
-            roomname = request.form.get('room_name')
-            room.name= roomname
+            newroomname = request.form.get('new_room_name')
+            room.name= newroomname
             db.session.commit()
-            list_of_messages = get_messages(roomname)
-            return render_template('chat.html', roomname=room, members=members,username=username,list_of_messages=list_of_messages)
+            return redirect(url_for('ViewRoom',username=username,roomname=newroomname))
+                 
 
         return render_template('update_room.html', room=room, members=members,username=username)
     
