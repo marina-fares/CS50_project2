@@ -3,6 +3,12 @@
 <title>Welcome</title>
 {% endblock  %}
 
+{%block signinbtn%}
+            <button class="btn btn-outline-secondary" > <a href="{{url_for('signin')}}" style='text-decoration:none; background-color:#ccccc;'> LogOut </a></button>
+            <button class="btn btn-outline-secondary" > <a href="{{url_for('start', username=username, rooms=rooms)}}" style='text-decoration:none; background-color:#ccccc;'> Home </a></button>
+            <a class="navbar-brand" href="#">{{username}}</a>
+{%endblock%}
+
 {% block Welcome %}
 <!--welcomeblock-->
 <div class='container'>
@@ -59,3 +65,4 @@
 </div>
 <!--endblock-->
 {% endblock  %}
+

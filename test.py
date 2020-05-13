@@ -1,8 +1,7 @@
 from db_fun import * 
 
 def main():
-    room = get_messages('Room1')
-    print(room)
+    add_room_member('Room', 'marina')
     # Add user data
     '''
     user=UserData(name='marina1', email='marina1@gmail.com', password='1' )

@@ -38,6 +38,15 @@ def signup():
     '''
     return render_template('signup.html')
 
+
+@app.route("/start<username>")
+def start(username):
+    '''
+    '''
+    rooms=[]
+    rooms= Room.query.add_columns('name').all()
+    return render_template("start.html", username = username, rooms = rooms)
+
 @app.route("/welcome",methods=['POST'])
 def welcome():
     '''

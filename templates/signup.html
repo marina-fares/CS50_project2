@@ -2,6 +2,12 @@
 {% block title %}
 <title>SignIN</title>
 {% endblock  %}
+
+{%block signinbtn%}
+            <button class="btn btn-outline-secondary" style='margin-left:900px'> <a href="{{url_for('signup')}}" style='text-decoration:none; background-color:#ccccc;'> SignUp </a></button>
+            <button class="btn btn-outline-secondary" > <a href="{{url_for('signin')}}" style='text-decoration:none; background-color:#ccccc'> SignIn </a></button>
+{%endblock%}
+
 {%block signin%}
         <!--signin form block-->
         <div class='container-fluid  '>
@@ -11,11 +17,11 @@
         welcome to our webChat 
         </label>
 
-        <form action="{{url_for('storedata')}}" method="post">
+        <form action="{{url_for('storedate')}}" method="post">
         <input class='formElement' type='text' placeholder='User Name' name='username'></input><br>
         <input class='formElement' type='text' placeholder='User Email' name='email'></input><br>
         <input class='formElement' type='password' placeholder='Password' name='password'></input><br>
-        <button class='formElement' type='submit'>SignUp </button>
+        <button class='formElement' type='submit' onclick="welcomefun()">SignUp </button>
         </form>
 </div>
 </div>

@@ -1,5 +1,7 @@
 1) authentication input user
-2) make name opject in class models uniqe
-3) make alert functions whene error exist
-4) style of update page and rewrite it's functionality
-5) rewrite commit for each function and rewrite README.md
+2) make name opject in class models uniqe "Done"
+3) make alert functions whene error exist "Done"
+4) style of update page and rewrite it's functionality "Done"
+5) rewrite commit for each function and rewrite README.md "Done"
+6) Edit NavBar --signin--signup--logout-- "Done"
+7) update secketio events "Done"

@@ -6,7 +6,7 @@ db = SQLAlchemy()
 class UserData(db.Model):
     __tablename__ = "userdata"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)# add uniqe query
+    name = db.Column(db.String, nullable=False, unique=True)# add uniqe query
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
 
@@ -14,7 +14,7 @@ class UserData(db.Model):
 class Room(db.Model):
     __tablename__ = "room"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False, unique=True)
     created_at = db.Column(db.DateTime, nullable=False)
     created_by = db.Column(db.String, nullable=False)
 
