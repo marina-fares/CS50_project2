@@ -3,9 +3,7 @@
 
 ### Overview
 
-It's a This project an online messaging service using Flask, similar in spirit to Slack.
-7
-chat room for your whole company, designed to replace email as your primary method of communication and sharing.
+This is a chat room for your whole company, designed to replace email as your primary method of communication and sharing.
 
 ### Features
  
