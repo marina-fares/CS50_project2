@@ -140,16 +140,44 @@ def updateroom(username, roomname):
         members= get_room_members(roomname)
 
         if request.method == 'POST':
-            newroomname = request.form.get('new_room_name')
-            room.name= newroomname
-            db.session.commit()
-            return redirect(url_for('ViewRoom',username=username,roomname=newroomname))
-                 
+            
+            new_room_name = request.form.get('new_room_name')
+            Remove_member = request.form.get('Remove_member')
+            Add_member = request.form.get('Add_member')
+            
+            if new_room_name:
+                try: #to check unique Room name
+                    newroomname = new_room_name
+                    room.name= newroomname
+                    db.session.commit()
+                    return redirect(url_for('ViewRoom',username=username,roomname=newroomname))
+                except:
+                    flash("this Room name is used please choose a uniqe one")
+                    return redirect(url_for('ViewRoom',username=username,roomname=roomname))
+
+            elif Remove_member:
+                 #to check unique Room name
+                try:
+                    remove_room_member(Remove_member , roomname)
+                    return redirect(url_for('ViewRoom',username=username,roomname=roomname))
+                except:
+                    flash("this user isn't Exist")
+                    return redirect(url_for('ViewRoom',username=username,roomname=roomname))
+
+            elif Add_member:
+                try:#check if user name is right    
+                    add_room_member(roomname, Add_member)
+                    return redirect(url_for('ViewRoom',username=username,roomname=roomname))
+                except:
+                    flash("this user is't exist")
+                    return redirect(url_for('ViewRoom',username=username,roomname=roomname))
+
 
         return render_template('update_room.html', room=room, members=members,username=username)
     
     else:
-        return "Room Not found"
+        flash("this function available for Admin only")
+        return redirect(url_for('ViewRoom',username=username,roomname=roomname))
 
 @socketio.on('join_room')
 def handle_join_room_event(data):   

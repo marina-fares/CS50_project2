@@ -26,14 +26,6 @@ def create_room(owner,roomname):
     db.session.add(member)
     db.session.commit()
 
-def add_room_member(user_id,room_id):
-    '''
-    this function when user join any room
-    input: user_id and room_id
-    '''
-    member = RoomMember(user_id=user_id, room_id=room_id[1], owner_flag=False, added_at=datetime.now())
-    db.session.add(member)
-    db.session.commit()
 
 def get_room_members(room_name):
     '''
@@ -52,23 +44,19 @@ def is_owner(username , roomname):
     owner = RoomMember.query.add_column('owner_flag').filter_by(user_id = user.id, room_id = room.id).first()
     return owner[1]
 
-def update_room(room_name):
-    room= Room.query.filter_by(room_name=room_name).first()
-
-def remove_room_member():
-    pass
-
 
 def add_room_member(roomname, username):
     '''
     add user in spesific room
     once user decided to join any room
     '''
-    user_id= UserData.query.add_column('id').filter_by(name=username).first()[1]
-    room_id= Room.query.add_column('id').filter_by(name=roomname).first()[1]
-    member = RoomMember(user_id=user_id, room_id=room_id, owner_flag=False, added_at=datetime.now())
-    db.session.add(member)
-    db.session.commit()
+    user_id = UserData.query.add_column('id').filter_by(name=username).first()[1]
+    room_id = Room.query.add_column('id').filter_by(name=roomname).first()[1]
+    member = RoomMember.query.filter_by(user_id=user_id, room_id=room_id).first()
+    if not member:
+        member = RoomMember(user_id=user_id, room_id=room_id, owner_flag=False, added_at=datetime.now())
+        db.session.add(member)
+        db.session.commit()
 
 def get_messages(roomname):
     '''
@@ -80,6 +68,16 @@ def get_messages(roomname):
         list_of_messages.append([message.created_by ,message.created_at , message.text])    
     return list_of_messages
 
+def update_room(room_name):
+    room= Room.query.filter_by(room_name=room_name).first()
+
+def remove_room_member(member_name , room_name):
+    room = Room.query.filter_by(name=room_name).first()
+    member = UserData.query.filter_by(name=member_name).first()
+    roommember = RoomMember.query.filter_by(user_id= member.id , room_id = room.id).first()
+    db.session.delete(roommember)
+    db.session.commit()
+    return True
 
 
 
