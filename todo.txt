@@ -4,4 +4,5 @@
 4) style of update page and rewrite it's functionality "Done"
 5) rewrite commit for each function and rewrite README.md "Done"
 6) Edit NavBar --signin--signup--logout-- "Done"
-7) update secketio events "Done"
+7) update secketio events 
+8) give access to user to leave room
